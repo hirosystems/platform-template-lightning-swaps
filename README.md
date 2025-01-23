@@ -14,9 +14,7 @@ The [stxswap_v10.clar](/examples/lightning-swaps/contracts/stxswap_v10.clar) con
 + `claimStx` claims the STX locked in a contract
 + `refundStx` refunds the STX locked in a contract
 
-To add new contracts, follow detailed instructions at [Add new Contract](https://docs.hiro.so/clarinet/how-to-guides/how-to-add-contract).
-
-> **NOTE**: To use this example with Clarinet inside [Hiro Platform](https://platform.hiro.so), you can open the terminal session inside VS code by navigating to File -> View -> Terminal.
+To add a new contract, use [Clarinet](https://docs.hiro.so/stacks/clarinet).
 
 ## Test your Contract
 
