@@ -24,7 +24,7 @@ describe("stxswap_v10 contract tests", () => {
         Cl.uint(timelock),
         Cl.standardPrincipal(wallet2),
       ],
-      wallet1
+      wallet1,
     );
 
     expect(lockResult.result).toBeOk(Cl.bool(true));
@@ -34,7 +34,7 @@ describe("stxswap_v10 contract tests", () => {
       contractName,
       "claimStx",
       [Cl.bufferFromHex(preimage), Cl.uint(amount)],
-      wallet2
+      wallet2,
     );
 
     expect(claimResult.result).toBeOk(Cl.bool(true));
@@ -50,7 +50,7 @@ describe("stxswap_v10 contract tests", () => {
         Cl.uint(5),
         Cl.standardPrincipal(wallet2),
       ],
-      wallet1
+      wallet1,
     );
     expect(lockStxResponse.result).toBeOk(Cl.bool(true));
 
@@ -59,7 +59,7 @@ describe("stxswap_v10 contract tests", () => {
       contractName,
       "getSwap",
       [Cl.bufferFromHex(preimageHash)],
-      wallet1
+      wallet1,
     );
     expect(swap.result).toBeSome(
       Cl.tuple({
@@ -67,7 +67,7 @@ describe("stxswap_v10 contract tests", () => {
         timelock: Cl.uint(5),
         claimPrincipal: Cl.standardPrincipal(wallet2),
         initiator: Cl.standardPrincipal(wallet1),
-      })
+      }),
     );
 
     simnet.mineEmptyBlocks(6);
@@ -76,7 +76,7 @@ describe("stxswap_v10 contract tests", () => {
       contractName,
       "refundStx",
       [Cl.bufferFromHex(preimageHash)],
-      wallet1
+      wallet1,
     );
     expect(refundStxResponse.result).toBeOk(Cl.bool(true));
   });
@@ -92,7 +92,7 @@ describe("stxswap_v10 contract tests", () => {
         Cl.uint(timelock),
         Cl.standardPrincipal(wallet2),
       ],
-      wallet1
+      wallet1,
     );
 
     // Attempt to claim STX with the wrong principal
@@ -100,7 +100,7 @@ describe("stxswap_v10 contract tests", () => {
       contractName,
       "claimStx",
       [Cl.bufferFromHex(preimage), Cl.uint(amount)],
-      wallet1
+      wallet1,
     );
 
     expect(claimResult.result).toBeErr(Cl.uint(1002));
@@ -112,7 +112,7 @@ describe("stxswap_v10 contract tests", () => {
       contractName,
       "claimStx",
       [Cl.bufferFromHex("02"), Cl.uint(amount)],
-      wallet2
+      wallet2,
     );
 
     expect(claimResult.result).toBeErr(Cl.uint(1000));
@@ -129,7 +129,7 @@ describe("stxswap_v10 contract tests", () => {
         Cl.uint(timelock),
         Cl.standardPrincipal(wallet2),
       ],
-      wallet1
+      wallet1,
     );
 
     // Attempt to lock STX again with the same preimage hash
@@ -142,7 +142,7 @@ describe("stxswap_v10 contract tests", () => {
         Cl.uint(timelock),
         Cl.standardPrincipal(wallet2),
       ],
-      wallet1
+      wallet1,
     );
 
     expect(lockResult.result).toBeErr(Cl.uint(1005));
@@ -154,7 +154,7 @@ describe("stxswap_v10 contract tests", () => {
       contractName,
       "refundStx",
       [Cl.bufferFromHex(preimageHash)],
-      wallet1
+      wallet1,
     );
 
     expect(refundResult.result).toBeErr(Cl.uint(1000));
@@ -171,7 +171,7 @@ describe("stxswap_v10 contract tests", () => {
         Cl.uint(timelock),
         Cl.standardPrincipal(wallet2),
       ],
-      wallet1
+      wallet1,
     );
 
     // Mine empty blocks until the timelock expires
@@ -182,7 +182,7 @@ describe("stxswap_v10 contract tests", () => {
       contractName,
       "refundStx",
       [Cl.bufferFromHex(preimageHash)],
-      wallet1
+      wallet1,
     );
 
     expect(refundResult.result).toBeOk(Cl.bool(true));
@@ -192,7 +192,7 @@ describe("stxswap_v10 contract tests", () => {
       contractName,
       "claimStx",
       [Cl.bufferFromHex(preimage), Cl.uint(amount)],
-      wallet2
+      wallet2,
     );
 
     expect(claimResult.result).toBeErr(Cl.uint(1000));
