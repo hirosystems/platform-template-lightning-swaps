@@ -36,7 +36,7 @@
     (asserts! (is-eq (map-get? swaps { hash: preimageHash }) none)
       ERR_HASH_ALREADY_EXISTS
     )
-    (unwrap-panic (stx-transfer? amount tx-sender (as-contract tx-sender)))
+    (unwrap-panic (stx-transfer? amount tx-sender current-contract))
     (map-set swaps { hash: preimageHash } {
       amount: amount,
       timelock: timelock,
@@ -64,7 +64,9 @@
     (asserts! (is-eq claimer (get claimPrincipal swap)) ERR_INVALID_CLAIMER)
     (asserts! (is-eq (get amount swap) amount) ERR_WRONG_AMOUNT)
     (asserts! (map-delete swaps { hash: preimageHash }) ERR_SWAP_NOT_FOUND)
-    (try! (as-contract (stx-transfer? (get amount swap) tx-sender claimer)))
+    (try! (as-contract? ((with-stx amount))
+      (try! (stx-transfer? amount current-contract claimer))
+    ))
     (print "claim")
     (print preimageHash)
     (ok true)
@@ -77,13 +79,16 @@
   (let (
       (claimer tx-sender)
       (swap (unwrap! (map-get? swaps { hash: preimageHash }) ERR_SWAP_NOT_FOUND))
+      (amount (get amount swap))
     )
     (asserts! (> burn-block-height (get timelock swap))
       ERR_REFUND_BLOCKHEIGHT_NOT_REACHED
     )
     (asserts! (is-eq claimer (get initiator swap)) ERR_INVALID_CLAIMER)
     (map-delete swaps { hash: preimageHash })
-    (try! (as-contract (stx-transfer? (get amount swap) tx-sender claimer)))
+    (try! (as-contract? ((with-stx amount))
+      (try! (stx-transfer? amount current-contract claimer))
+    ))
     (print "refund")
     (print preimageHash)
     (ok true)
